@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: course-calendar
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz

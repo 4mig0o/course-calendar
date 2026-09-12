@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d9488">
+  <meta name="description" content="将大学课表 PDF 转换为可导入手机日历的 ICS 文件">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/static/styles.css?v=20260829-3">
+  <title>课表转日历 · PDF → ICS</title>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> Course Calendar · MVP</div>
+      <h1>把课表，放进你的日历。</h1>
+      <p class="hero-copy">上传教务系统导出的 PDF，确认学期日期，下载一份可以直接导入手机日历的 ICS 文件。</p>
+      <div class="trust-row"><span>本地优先处理</span><span>不要求注册</span><span>支持中文课表</span></div>
+    </header>
+
+    <main>
+      <section class="panel upload-panel" aria-labelledby="upload-title">
+        <div class="section-heading">
+          <div><span class="step-number">01</span><h2 id="upload-title">上传课表</h2></div>
+          <span class="pill">PDF · 最大 10 MB</span>
+        </div>
+        <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="选择课表 PDF">
+          <div class="upload-icon" aria-hidden="true">↑</div>
+          <div class="dropzone-title">拖拽 PDF 到这里，或 <span>选择文件</span></div>
+          <div class="dropzone-hint">支持教务系统导出的文本型 PDF；扫描件会尝试 OCR</div>
+          <input id="fileInput" type="file" accept="application/pdf,.pdf" hidden>
+        </div>
+        <div id="fileMeta" class="file-meta hidden"></div>
+        <div id="connectionBanner" class="notice notice-error hidden" role="alert"><span class="notice-icon">!</span><div><strong>无法连接解析服务</strong><br><span id="connectionMessage">请先启动后端服务；不要直接双击打开 index.html。</span></div></div>
+        <div id="uploadStatus" class="status" role="status" aria-live="polite"></div>
+      </section>
+
+      <section id="workspace" class="panel workspace hidden" aria-labelledby="review-title">
+        <div class="section-heading">
+          <div><span class="step-number">02</span><h2 id="review-title">核对并修正</h2></div>
+          <span id="parseSummary" class="pill pill-accent"></span>
+        </div>
+        <div class="notice notice-info"><span class="notice-icon">i</span><div><strong>请确认第 1 周日期</strong><br>PDF 通常只写周次，不包含实际日期。下面的日期必须由你确认，程序不会静默猜测。</div></div>
+        <div class="settings-grid">
+          <label class="field"><span>第 1 周周一 <em>必填</em></span><input id="week1Start" type="date" required></label>
+          <label class="field"><span>日历时区</span><select id="timezone"><option value="Asia/Shanghai">Asia/Shanghai（中国标准时间）</option><option value="UTC">UTC</option></select></label>
+        </div>
+        <label class="confirm-check"><input id="confirmSettings" type="checkbox"> 我已核对第 1 周日期和时区，确认无误后生成</label>
+        <div id="warnings" class="warning-list hidden"></div>
+        <div class="table-wrap">
+          <table id="courseTable">
+            <thead><tr><th>课程</th><th>星期</th><th>节次</th><th>周次</th><th>地点</th><th>教师</th><th>类型</th><th aria-label="操作"></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="emptyCourses" class="empty-state hidden">没有识别到固定时段课程，请重新上传或检查 PDF。</div>
+        <button id="addCourseButton" class="text-button" type="button">＋ 添加课程</button>
+        <div class="reminder-heading"><h3>无具体时段的课程提醒</h3><span>将按整周全天事件生成</span></div>
+        <div id="reminders" class="reminders"></div>
+        <div class="action-row"><button id="generateButton" class="button button-primary" type="button">生成 ICS 文件 <span>→</span></button><span class="action-hint">导出前会再次检查时间冲突和格式</span></div>
+        <div id="generateStatus" class="status" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="panel guide-panel" aria-labelledby="guide-title">
+        <div class="section-heading"><div><span class="step-number">03</span><h2 id="guide-title">导入手机日历</h2></div><span class="pill">下载后操作</span></div>
+        <div class="guide-grid">
+          <details open><summary><span class="guide-badge"></span> iPhone / iPad</summary><p>下载 ICS 后，在“文件”或 Safari 中打开，选择“添加全部”，再选择目标日历。</p></details>
+          <details><summary><span class="guide-badge">A</span> Android / Google 日历</summary><p>将 ICS 文件传到电脑，在 Google 日历网页端“设置 → 导入和导出 → 导入”中选择文件和目标日历。</p></details>
+          <details><summary><span class="guide-badge">O</span> Outlook</summary><p>打开 Outlook 日历，选择“添加日历 → 从文件上传”，选择 ICS 并确认导入。</p></details>
+        </div>
+        <p class="privacy-note">隐私提示：文件只在本次请求中用于解析，不写入数据库；服务端处理完成后即释放临时数据。正式部署请使用 HTTPS。</p>
+      </section>
+    </main>
+    <footer>Course Calendar <span>·</span> PDF to ICS · 开源 MVP</footer>
+  </div>
+  <script src="/static/app.js?v=20260829-3" defer></script>
+</body>
+</html>

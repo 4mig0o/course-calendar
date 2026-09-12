@@ -1,0 +1,5 @@
+# Optional OCR fallback for scanned PDFs.
+# Also install the Tesseract executable and its chi_sim language pack.
+pypdfium2>=4.30
+Pillow>=10.0
+pytesseract>=0.3.10

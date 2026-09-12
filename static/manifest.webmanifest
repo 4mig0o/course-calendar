@@ -1,0 +1,10 @@
+{
+  "name": "课表转日历",
+  "short_name": "课表日历",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef6f3",
+  "theme_color": "#0d9488",
+  "lang": "zh-CN",
+  "description": "将大学课表 PDF 转换为可导入手机日历的 ICS 文件"
+}
