@@ -301,8 +301,8 @@ def parse_pdf(data: bytes) -> ParseResult:
     reminders = _parse_reminders(re.sub(r"\s+", "", note_text))
     warnings: list[str] = []
     if courses:
-        if not reminders and "其他课程" in note_text:
-            warnings.append("检测到“其他课程”说明，但未能自动识别其中的全天提醒，请在预览中确认。")
+        if "其他课程" in note_text:
+            warnings.append("检测到“其他课程”：目前仅支持部分课程名称，可能存在遗漏。请对照 PDF 核对全天事项；未识别的内容请在日历中补充。")
         return ParseResult(courses=courses, reminders=reminders, warnings=warnings, pages=pages)
 
     # No text-layer timetable was found. Try OCR when available; otherwise the

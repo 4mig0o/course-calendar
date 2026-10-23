@@ -15,7 +15,7 @@ python server.py
 
 浏览器打开 <http://127.0.0.1:8787>。也可以使用 `python server.py --host 0.0.0.0 --port 8787` 监听其他网卡。
 
-Windows 小白也可以双击项目根目录的 [`启动课表转换工具.bat`](启动课表转换工具.bat)。首次使用前仍需安装 Python 和 `requirements.txt` 中的依赖。
+Windows 小白也可以双击项目根目录的 [`启动课表转换工具.cmd`](启动课表转换工具.cmd)。首次使用前仍需安装 Python 和 `requirements.txt` 中的依赖。
 
 如果页面显示 **Failed to fetch**，通常是后端没有启动，或是直接双击了 `index.html`。请关闭该页面，双击上面的 `.bat` 文件，等待浏览器打开 `http://127.0.0.1:8787` 后再上传 PDF；页面现在也会显示具体提示并自动重试连接。
 
@@ -30,13 +30,6 @@ Windows 小白也可以双击项目根目录的 [`启动课表转换工具.bat`]
 
 部署前建议把服务名改成自己的名称，并在 Render 的设置中限制上传大小、开启 HTTPS（Render 默认提供 HTTPS）。如果需要 OCR，还要在 Docker 镜像中额外安装 Tesseract 和 `chi_sim` 语言包；基础文本型 PDF 无需这些依赖。
 
-当前工作区提供的 Codex Python 运行时已包含 `pdfminer.six`，因此可以直接运行：
-
-```powershell
-$env:PYTHONPATH = "."
-& "C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" server.py
-```
-
 ## 使用流程
 
 1. 在学校教务系统下载“学期总课程表”PDF，拖入上传区域。
@@ -45,7 +38,7 @@ $env:PYTHONPATH = "."
 4. 确认时区（默认 `Asia/Shanghai`），点击“生成 ICS 文件”。
 5. 打开下载的文件导入系统日历。
 
-没有具体星期/时间/地点的“其他课程”会生成整周全天提醒，不会被擅自安排到某个时段。
+没有具体星期/时间/地点的“其他课程”会生成整周日历事项，不会被擅自安排到某个时段。
 
 ## 导入日历
 
@@ -77,14 +70,7 @@ pip install -r requirements-ocr.txt
 
 ## 测试
 
-使用标准库 `unittest`，无需 pytest：
-
-```powershell
-$env:PYTHONPATH = "."
-& "C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m unittest discover -s tests -v
-```
-
-测试覆盖周次解析、节次时间、日期计算、冲突检测、中文 UTF-8 ICS、RFC 5545 折行、全天提醒，以及当前提供的样例课表 PDF 端到端解析。
+运行 python -B -m unittest discover -s tests -v。
 
 ## 已知限制
 

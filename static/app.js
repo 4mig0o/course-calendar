@@ -37,7 +37,7 @@
     } catch (_) {
       banner.classList.remove("hidden");
       $("#connectionMessage").textContent = window.location.protocol === "file:"
-        ? "请不要直接双击 index.html；请运行“启动课表转换工具.bat”，再打开 http://127.0.0.1:8787。"
+        ? "请不要直接双击 index.html；请运行“启动课表转换工具.cmd”，再打开 http://127.0.0.1:8787。"
         : "请确认后端服务仍在运行，或联系网站管理员。当前页面无法访问 /api/parse。";
       window.setTimeout(checkBackend, 2500);
     }
@@ -71,7 +71,7 @@
       <div class="reminder-fields"><label>第 <input class="reminder-input" data-field="start_week" type="number" min="1" max="53" value="${escapeHtml(item.start_week)}" aria-label="开始周">–<input class="reminder-input" data-field="end_week" type="number" min="1" max="53" value="${escapeHtml(item.end_week)}" aria-label="结束周"> 周</label></div>
       <input class="reminder-input" data-field="teacher" value="${escapeHtml(item.teacher || "")}" placeholder="教师（可选）" aria-label="教师">
       <input class="reminder-input" data-field="note" value="${escapeHtml(item.note || "")}" placeholder="备注（可选）" aria-label="备注">
-      <span class="reminder-caption">整周全天提醒 · 未指定具体时间</span>
+      <span class="reminder-caption">整周日历事项 · 未指定具体时间</span>
     </div>`).join("");
   }
 
@@ -105,7 +105,7 @@
       handleParsed(result, file); setStatus($("#uploadStatus"), "解析完成，请核对下方表格。", "success");
     } catch (error) {
       const message = error instanceof TypeError
-        ? "无法连接解析服务。请先运行“启动课表转换工具.bat”，不要直接打开 index.html。"
+        ? "无法连接解析服务，请稍后重试；使用公开网址时请联系网站管理员，本地使用时请确认服务已启动。"
         : (error.message || "解析失败，请重试。");
       $("#connectionBanner").classList.toggle("hidden", !(error instanceof TypeError));
       setStatus($("#uploadStatus"), message, "error");

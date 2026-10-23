@@ -93,21 +93,25 @@ def parse_week_spec(value: str | Iterable[int]) -> list[int]:
             raise ValidationError("周次不能为空")
         return weeks
     text = value.strip().replace("，", ",").replace("、", ",").replace("～", "-").replace("—", "-")
-    matches = re.findall(r"(\d+)\s*(?:-\s*(\d+))?\s*周?", text)
+    text = re.sub(r"\s+", "", text).replace("至", "-").replace("到", "-").replace("–", "-")
+    pattern = r"(\d+)(?:-(\d+))?周?(?:[（(]?(单周|双周|奇数周|偶数周)[）)]?)?"
+    parts = text.split(",")
+    matches = [re.fullmatch(pattern, part) for part in parts]
+    if not all(matches):
+        raise ValidationError(f"无法识别周次：{value}，请使用 1-16周或1-8周(单周),10-16周(双周)")
+    matches = [match.groups() for match in matches]
     if not matches:
         raise ValidationError(f"无法识别周次：{value}")
     result: set[int] = set()
-    for first, last in matches:
+    for first, last, parity in matches:
         start, end = int(first), int(last or first)
         if end < start:
             raise ValidationError(f"周次范围无效：{value}")
-        result.update(range(start, end + 1))
+        if not 1 <= start <= end <= 53:
+            raise ValidationError("周次必须在 1-53 范围内")
+        result.update(week for week in range(start, end + 1) if not parity or week % 2 == (1 if parity in ("单周", "奇数周") else 0))
     if not result or min(result) < 1 or max(result) > 53:
         raise ValidationError(f"周次必须在 1-53 范围内：{value}")
-    if re.search(r"单周|奇数周", value):
-        result = {week for week in result if week % 2 == 1}
-    elif re.search(r"双周|偶数周", value):
-        result = {week for week in result if week % 2 == 0}
     if not result:
         raise ValidationError(f"周次筛选后为空：{value}")
     return sorted(result)
@@ -369,6 +373,12 @@ def parse_iso_date(value: str) -> date:
 
 
 def parse_payload_courses(raw_courses: list[dict[str, Any]], raw_reminders: list[dict[str, Any]]) -> tuple[list[Course], list[Reminder]]:
+    if not isinstance(raw_reminders, list):
+        raise ValidationError("全天事项必须是列表")
+    if isinstance(raw_courses, list) and any(not isinstance(item, dict) for item in raw_courses):
+        raise ValidationError("每门课程必须是对象")
+    if any(not isinstance(item, dict) for item in raw_reminders):
+        raise ValidationError("每项全天事项必须是对象")
     if not isinstance(raw_courses, list) or not raw_courses:
         raise ValidationError("至少需要一门课程")
     courses = [course_from_dict(item) for item in raw_courses if isinstance(item, dict)]

@@ -13,9 +13,9 @@
   <div class="page-shell">
     <header class="hero">
       <div class="eyebrow"><span class="eyebrow-dot"></span> Course Calendar · MVP</div>
-      <h1>把课表，放进你的日历。</h1>
+      <h1>把课表放进你的日历。</h1>
       <p class="hero-copy">上传教务系统导出的 PDF，确认学期日期，下载一份可以直接导入手机日历的 ICS 文件。</p>
-      <div class="trust-row"><span>本地优先处理</span><span>不要求注册</span><span>支持中文课表</span></div>
+      <div class="trust-row"><span>无需注册使用</span><span>不要求注册</span><span>支持中文课表</span></div>
     </header>
 
     <main>
@@ -40,7 +40,7 @@
           <div><span class="step-number">02</span><h2 id="review-title">核对并修正</h2></div>
           <span id="parseSummary" class="pill pill-accent"></span>
         </div>
-        <div class="notice notice-info"><span class="notice-icon">i</span><div><strong>请确认第 1 周日期</strong><br>PDF 通常只写周次，不包含实际日期。下面的日期必须由你确认，程序不会静默猜测。</div></div>
+        <div class="notice notice-info"><span class="notice-icon">i</span><div><strong>请确认第 1 周日期</strong><br>PDF 通常只写周次，不包含实际日期。下面的日期必须由你确认，请按学校校历填写。</div></div>
         <div class="settings-grid">
           <label class="field"><span>第 1 周周一 <em>必填</em></span><input id="week1Start" type="date" required></label>
           <label class="field"><span>日历时区</span><select id="timezone"><option value="Asia/Shanghai">Asia/Shanghai（中国标准时间）</option><option value="UTC">UTC</option></select></label>
@@ -68,10 +68,10 @@
           <details><summary><span class="guide-badge">A</span> Android / Google 日历</summary><p>将 ICS 文件传到电脑，在 Google 日历网页端“设置 → 导入和导出 → 导入”中选择文件和目标日历。</p></details>
           <details><summary><span class="guide-badge">O</span> Outlook</summary><p>打开 Outlook 日历，选择“添加日历 → 从文件上传”，选择 ICS 并确认导入。</p></details>
         </div>
-        <p class="privacy-note">隐私提示：文件只在本次请求中用于解析，不写入数据库；服务端处理完成后即释放临时数据。正式部署请使用 HTTPS。</p>
+        <p class="privacy-note">隐私提示：PDF 会上传至当前网站的服务器，仅用于本次解析，不写入数据库；服务端处理完成后即释放临时数据。正式部署请使用 HTTPS。</p>
       </section>
     </main>
-    <footer>Course Calendar <span>·</span> PDF to ICS · 开源 MVP</footer>
+    <footer>Course Calendar <span>·</span> PDF to ICS · 课表转日历工具</footer>
   </div>
   <script src="/static/app.js?v=20260829-3" defer></script>
 </body>

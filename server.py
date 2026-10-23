@@ -68,7 +68,7 @@ class Handler(BaseHTTPRequestHandler):
         if not match:
             raise RequestError("请使用 multipart/form-data 上传 PDF")
         boundary = (match.group(1) or match.group(2)).encode("utf-8")
-        body = self._read_body(MAX_UPLOAD_BYTES)
+        body = self._read_body(MAX_UPLOAD_BYTES + 64 * 1024)
         marker = b"--" + boundary
         for part in body.split(marker)[1:]:
             if part.startswith(b"--"):
@@ -84,6 +84,8 @@ class Handler(BaseHTTPRequestHandler):
             disposition = re.search(r"name=\"([^\"]+)\"(?:;\s*filename=\"([^\"]*)\")?", headers, re.I)
             if disposition and disposition.group(2) is not None:
                 filename = unquote(disposition.group(2)).strip()
+                if len(content) > MAX_UPLOAD_BYTES:
+                    raise RequestError("PDF 文件超过 10 MB 限制")
                 if not filename.lower().endswith(".pdf"):
                     raise RequestError("只支持 .pdf 文件")
                 if not content.startswith(b"%PDF"):
