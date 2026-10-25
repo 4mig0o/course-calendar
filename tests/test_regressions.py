@@ -32,7 +32,7 @@ class RegressionTests(unittest.TestCase):
     def test_invalid_payload(self):
         for value in [None, {}, 'invalid']:
             with self.assertRaises(ValidationError):
-                parse_payload_courses([], value)
+                parse_payload_courses([{'name': '测试', 'weekday': 0, 'start_period': 1, 'end_period': 2, 'weeks': '1周'}], value)
 
 
 if __name__ == '__main__':

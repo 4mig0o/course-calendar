@@ -70,7 +70,9 @@ pip install -r requirements-ocr.txt
 
 ## 测试
 
-运行 python -B -m unittest discover -s tests -v。
+先运行 `python -m pip install -r requirements-test.txt` 安装测试依赖，再运行 `python -B -m unittest discover -s tests -v`。
+
+测试包含合成文本型 PDF 到 ICS、真实 HTTP 上传边界、输入校验、日历格式和启动检查。手机导入、浏览器交互与实际学校 PDF 的人工验收清单见 [tests/MANUAL.md](tests/MANUAL.md)。
 
 ## 已知限制
 
